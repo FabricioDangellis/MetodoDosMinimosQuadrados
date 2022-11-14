@@ -19,15 +19,13 @@ int main() {
 
     while (!fin.eof())
     {
-       
-			fin >> X;
-			fin >> Y;
+		fin >> X;
+		fin >> Y;
 
-			vetX.push_back(X);
-			vetY.push_back(Y);
-       
-
+		vetX.push_back(X);
+		vetY.push_back(Y);
     }
+
     fin.close();
 
 	int resposta;

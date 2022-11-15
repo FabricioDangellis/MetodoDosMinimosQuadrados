@@ -29,32 +29,32 @@ int main() {
     fin.close();
 
 	int resposta;
-	cout << "Qual tipo de metodo você quer? \n";
-	cout << "1) Linear \n2)Logaritima \n3)Geometrica \n4)Exponencial \n5)Polinomial \n6)Sair\n";
-	cin >> resposta;
+	do {
+		cout << "Qual tipo de metodo você quer? \n";
+		cout << "(1) Linear \n(2) Logaritima \n(3) Geometrica \n(4) Exponencial \n(5) Polinomial \n(6) Sair\n";
+		cin >> resposta;
 
-	switch (resposta)
-	{
-	case 1: 
-		Linear(vetX, vetY);
-
-	case 2:
-		//Logaritima();
-
-	case 3:
-		//Geometrica();
-
-	case 4:
-		//Exponencial();
-
-	case 5:
-		//Polinomial();
-
-	case 6:
-		
-	default:
-		break;
-	}
-
-	return 0;
+		switch (resposta)
+		{
+		case 1:
+			Linear(vetX, vetY);
+			break;
+		case 2:
+			Logaritimo(vetX, vetY);
+			break;
+		case 3:
+			Geometrico(vetX, vetY);
+			break;
+		case 4:
+			Exponencial(vetX, vetY);
+			break;
+		case 5:
+			Polinomial(vetX, vetY);
+			break;
+		case 6:
+			return 0;
+		default:
+			break;
+		}
+	}while(resposta != 6);
 }

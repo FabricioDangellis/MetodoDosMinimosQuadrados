@@ -8,6 +8,9 @@ using namespace std;
 
 double controle;
 
+vector<double> AnosPrevisao = { 2023.00, 2024.00, 2025.00, 2026.00, 2027.00, 2028.00, 2029.00, 2030.00 };
+
+
 double Somatorio(vector<double> vet) {
 	double somatorio = 0;
 	for (int i = 0; i < vet.size(); i++) {
@@ -175,6 +178,52 @@ vector<double> Pivoteamento( double x4, double x3, double x2, double x, double n
 	return ABC;
 }
 
+void PrevisaoLinear(vector<double> vetX, double A, double B) {
+	double previsao;
+
+	for (int i = 0; i < vetX.size(); i++) {
+		previsao = A * vetX[i] + B;
+		cout << "Ano:" << vetX[i] << " Previsao(mm): " << previsao << endl;
+	}
+}
+
+void PrevisaoLogaritmica(vector<double> vetX, double A, double B) {
+	double previsao;
+	vector<double> lnX = CalculaLN(vetX);
+
+	for (int i = 0; i < lnX.size(); i++) {
+		previsao = A * lnX[i] + B;
+		cout << "Ano:" << vetX[i] << " Previsao(mm): " << previsao << endl;
+	}
+}
+
+void PrevisaoGeometrica(vector<double> vetX, double A, double B) {
+	double previsao;
+	vector<double> lnX = CalculaLN(vetX);
+
+	for (int i = 0; i < lnX.size(); i++) {
+		previsao = exp(A * lnX[i] + B);
+		cout << "Ano:" << vetX[i] << " Previsao(mm): " << previsao << endl;
+	}
+}
+
+void PrevisaoExponencial(vector<double> vetX, double A, double B) {
+	double previsao;
+
+	for (int i = 0; i < vetX.size(); i++) {
+		previsao = exp(A * vetX[i] + B);
+		cout << "Ano:" << vetX[i] << " Previsao(mm): " << previsao << endl;
+	}
+}
+
+void PrevisaoPolinomial(vector<double> vetX, vector<double> vetX2, double A, double B, double C) {
+	double previsao;
+
+	for (int i = 0; i < vetX.size(); i++) {
+		previsao = A * pow(vetX[i], 2) + B * vetX[i] + C;
+		cout << "Ano:" << vetX[i] << " Previsao(mm): " << previsao << endl;
+	}
+}
 
 /*=========================================FUNÇÕES DOS METODOS=============================================*/
 
@@ -203,6 +252,14 @@ void Linear(vector<double> vetX, vector<double> vetY) {
 	cout << "R^2= " << r2 << endl;
 	cout << endl << endl;
 
+	int p;
+	cout << "Fazer previsao ate 2030? \n";
+	cout << "1) Sim \n2) Nao\n";
+	cin >> p;
+	if (p == 1) {
+		PrevisaoLinear(AnosPrevisao, A, B);
+	}
+	cout << endl;
 }
 
 //Método Logaritimo
@@ -229,6 +286,15 @@ void Logaritimo(vector<double> vetX, vector<double> vetY) {
 	cout << "Ym= " << Ym << endl;
 	cout << "R^2= " << r2 << endl;
 	cout << endl << endl;
+
+	int p;
+	cout << "Fazer previsao ate 2030? \n";
+	cout << "1) Sim \n2) Nao\n";
+	cin >> p;
+	if (p == 1) {
+		PrevisaoLogaritmica(AnosPrevisao, A, B);
+	}
+	cout << endl;
 }
 
 //Método Geometrico
@@ -242,9 +308,9 @@ void Geometrico(vector<double> vetX, vector<double> vetY) {
 	xy = XY(lnX, lnY);
 	double A = CalculaA(lnX.size(), Somatorio(xy), Somatorio(lnX), Somatorio(lnY), Somatorio(X2(lnX)));
 	double B = CalculaB(Somatorio(lnX), Somatorio(xy), Somatorio(lnY), Somatorio(X2(lnX)), lnY.size());
-	B = exp(B);
-	double Ym = CalculaYMedio(vetY);
-	double r2 = R2(Somatorio(SGRegGeo(vetX, A, B, Ym)), Somatorio(SQTot(vetY, Ym)));
+	//B = exp(B);
+	double Ym = CalculaYMedio(lnY);
+	double r2 = R2(Somatorio(SGReg(lnX, A, B, Ym)), Somatorio(SQTot(lnY, Ym)));
 
 	cout << endl << endl;
 	cout << "================ GEOMETRICO ================\n";
@@ -258,6 +324,15 @@ void Geometrico(vector<double> vetX, vector<double> vetY) {
 	cout << "Ym= " << Ym << endl;
 	cout << "R^2= " << r2 << endl;
 	cout << endl << endl;
+
+	int p;
+	cout << "Fazer previsao ate 2030? \n";
+	cout << "1) Sim \n2) Nao\n";
+	cin >> p;
+	if (p == 1) {
+		PrevisaoGeometrica(AnosPrevisao, A, B);
+	}
+	cout << endl;
 }
 
 //Metodo Exponêncial
@@ -269,9 +344,9 @@ void Exponencial(vector<double> vetX, vector<double> vetY) {
 	xy = XY(vetX, lnY);
 	double A = CalculaA(vetX.size(), Somatorio(xy), Somatorio(vetX), Somatorio(lnY), Somatorio(X2(vetX)));
 	double B = CalculaB(Somatorio(vetX), Somatorio(xy), Somatorio(lnY), Somatorio(X2(vetX)), lnY.size());
-	B = exp(B);
-	double Ym = CalculaYMedio(vetY);
-	double r2 = R2(Somatorio(SGRegExp(vetX, A, B, Ym)), Somatorio(SQTot(vetY, Ym)));
+	//B = exp(B);
+	double Ym = CalculaYMedio(lnY);
+	double r2 = R2(Somatorio(SGReg(vetX, A, B, Ym)), Somatorio(SQTot(lnY, Ym)));
 
 	cout << endl << endl;
 	cout << "================ EXPONENCIAL ================\n";
@@ -285,6 +360,15 @@ void Exponencial(vector<double> vetX, vector<double> vetY) {
 	cout << "Ym= " << Ym << endl;
 	cout << "R^2= " << r2 << endl;
 	cout << endl << endl;
+
+	int p;
+	cout << "Fazer previsao ate 2030? \n";
+	cout << "1) Sim \n2) Nao\n";
+	cin >> p;
+	if (p == 1) {
+		PrevisaoExponencial(AnosPrevisao, A, B);
+	}
+	cout << endl;
 }
 
 //Método Polinomial
@@ -321,4 +405,15 @@ void Polinomial(vector<double> vetX, vector<double> vetY) {
 	cout << "Ym= " << Ym << endl;
 	cout << "R^2= " << r2 << endl;
 	cout << endl << endl;
+
+	int p;
+	cout << "Fazer previsao ate 2030? \n";
+	cout << "1) Sim \n2) Nao\n";
+	cin >> p;
+	if (p == 1) {
+		PrevisaoPolinomial(AnosPrevisao, x2, abc[0], abc[1], abc[2]);
+	}
+	cout << endl;
+
 }
+
